@@ -15,6 +15,9 @@ Ansible playbook for automated OpenSUSE Tumbleweed setup with bspwm, Hyprland, C
 # Run full provisioning
 ./run.sh
 
+# One-shot install (single command)
+curl -sSL https://raw.githubusercontent.com/nocturnalbeast/provisuse/main/run.sh | bash
+
 # Run specific roles only
 ansible-playbook -i inventory.ini playbooks/site.yml -K --tags "base,cli"
 ```
