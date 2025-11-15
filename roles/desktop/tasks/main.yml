@@ -1,0 +1,122 @@
+---
+# Desktop environment tasks
+
+## Desktop Core
+- name: Install X11 window managers and desktop core
+  community.general.zypper:
+    name:
+      - bspwm
+      - sxhkd
+      - polybar
+      - picom
+      - dunst
+      - xsettingsd
+      - xinit
+      - xorg-x11-essentials
+      - xorg-x11
+      - xorg-x11-driver-input
+      - xorg-x11-driver-video
+      - wmctrl
+      - xdotool
+      - rofi
+      - maim
+      - slop
+    state: present
+  tags: [desktop, desktop-core, desktop-core-x11]
+
+- name: Install X11 development libraries
+  community.general.zypper:
+    name:
+      - libX11-devel
+      - libXinerama-devel
+      - libXft-devel
+      - xorg-x11-util-devel
+    state: present
+  tags: [desktop, desktop-core, desktop-core-x11]
+
+- name: Install Wayland compositors and desktop core
+  community.general.zypper:
+    name:
+      - hyprland
+      - hyprland-qtutils
+      - mako
+      - xdg-desktop-portal-hyprland
+      - swww
+      - waybar
+      - eww
+      - swaylock
+      - slurp
+      - grim
+    state: present
+  tags: [desktop, desktop-core, desktop-core-wayland]
+
+- name: Install fonts
+  community.general.zypper:
+    name:
+      - iosevka-fonts
+      - symbols-only-nerd-fonts
+      - fontforge
+      - font-manager
+      - inter-fonts
+      - inter-variable-fonts
+    state: present
+  tags: [desktop, desktop-core]
+
+## Desktop Applications
+- name: Import LibreWolf GPG key
+  rpm_key:
+    key: https://rpm.librewolf.net/pubkey.gpg
+    state: present
+  tags: [desktop, desktop-apps]
+
+- name: Import Sublime Merge GPG key
+  rpm_key:
+    key: https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+    state: present
+  tags: [desktop, desktop-apps]
+
+- name: Add LibreWolf repository
+  community.general.zypper:
+    name: "https://rpm.librewolf.net"
+    state: present
+    repo: librewolf
+  tags: [desktop, desktop-apps]
+
+- name: Add Sublime Merge repository
+  community.general.zypper:
+    name: "https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo"
+    state: present
+    repo: sublime-text
+  tags: [desktop, desktop-apps]
+
+- name: Refresh repositories
+  community.general.zypper:
+    update_cache: true
+  tags: [desktop, desktop-apps]
+
+- name: Install desktop applications
+  community.general.zypper:
+    name:
+      - librewolf
+      - chromium
+      - nemo
+      - zathura
+      - zathura-plugin-cb
+      - zathura-plugin-pdf-mupdf
+      - zathura-plugin-ps
+      - engrampa
+      - android-tools
+      - meld
+      - codium
+      - pqiv
+      - imv
+      - krita
+      - gimp
+      - neovide
+      - ffmpegthumbnailer
+      - ffmpegthumbs
+      - handlr
+      - gnome-disk-utility
+      - sublime-merge
+    state: present
+  tags: [desktop, desktop-apps] 

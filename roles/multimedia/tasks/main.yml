@@ -1,0 +1,42 @@
+---
+# Multimedia tasks
+
+- name: Add Packman Essentials repository
+  community.general.zypper:
+    name: "https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/Essentials/"
+    state: present
+    priority: 90
+    repo: packman-essentials
+  tags: [multimedia]
+
+- name: Switch system packages to Packman Essentials
+  community.general.zypper:
+    name: "*"
+    state: dist-upgrade
+    allow_vendor_change: true
+    extra_args: "--from packman-essentials"
+  tags: [multimedia]
+
+- name: Install multimedia applications
+  community.general.zypper:
+    name:
+      - mpv
+      - mpv-mpris
+      - easyeffects
+      - pavucontrol
+      - playerctl
+      - mpd
+      - mpDris2
+      - pipewire
+      - pipewire-pulse
+      - wireplumber
+    state: present
+  tags: [multimedia]
+
+- name: Enable user services
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    user: yes
+  loop: "{{ user_services }}"
+  tags: [multimedia] 

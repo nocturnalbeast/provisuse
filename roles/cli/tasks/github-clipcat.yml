@@ -1,0 +1,66 @@
+---
+# Download and install clipcat from GitHub (https://github.com/xrelkd/clipcat)
+- name: Download latest clipcat release
+  block:
+    - name: Get latest clipcat release info
+      uri:
+        url: "https://api.github.com/repos/xrelkd/clipcat/releases/latest"
+        return_content: yes
+      register: clipcat_release
+      
+    - name: Set facts for clipcat download
+      set_fact:
+        # Filter for Linux x86_64 musl asset (tarball)
+        clipcat_asset: "{{ clipcat_release.json.assets | selectattr('name', 'search', 'x86_64-unknown-linux-musl.tar.gz') | first }}"
+        
+    - name: Download the latest clipcat release
+      get_url:
+        url: "{{ clipcat_asset.browser_download_url }}"
+        dest: "/tmp/{{ clipcat_asset.name }}"
+        mode: '0644'
+      register: clipcat_download
+      
+    - name: Create temporary extraction directory
+      file:
+        path: "/tmp/clipcat_extract"
+        state: directory
+        mode: '0755'
+        
+    - name: Extract the clipcat archive
+      unarchive:
+        src: "{{ clipcat_download.dest }}"
+        dest: "/tmp/clipcat_extract"
+        remote_src: yes
+        
+    - name: Create ~/.bin directory if it doesn't exist
+      file:
+        path: "{{ ansible_env.HOME }}/.bin"
+        state: directory
+        mode: '0755'
+        
+    - name: Install clipcat binaries to ~/.bin
+      copy:
+        src: "/tmp/clipcat_extract/{{ item }}"
+        dest: "{{ ansible_env.HOME }}/.bin/{{ item }}"
+        mode: '0755'
+        remote_src: yes
+      loop:
+        - "clipcatd"
+        - "clipcatctl"
+        - "clipcat-menu"
+        - "clipcat-notify"
+      
+    - name: Create clipcat config directory
+      file:
+        path: "{{ ansible_env.HOME }}/.config/clipcat"
+        state: directory
+        mode: '0755'
+        
+    - name: Clean up temporary files
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/{{ clipcat_asset.name }}"
+        - "/tmp/clipcat_extract"
+  tags: [cli, cli-utils, cli-thirdparty] 

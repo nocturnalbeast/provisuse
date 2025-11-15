@@ -1,0 +1,52 @@
+---
+# User file management tasks
+
+- name: Find all files and directories in the home folder (except .ansible)
+  find:
+    paths: "{{ home_dir }}"
+    file_type: any
+    excludes: ".ansible"
+    recurse: false
+  register: home_contents
+  become_user: "{{ username }}"
+  tags: [files]
+
+- name: Remove all content of the home folder (except .ansible)
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ home_contents.files }}"
+  when: home_contents.matched > 0
+  become_user: "{{ username }}"
+  tags: [files]
+
+- name: Create required user directories
+  file:
+    path: "{{ home_dir }}/{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - .config
+    - .local
+    - .cache
+    - .local/share
+    - .local/state
+  become_user: "{{ username }}"
+  tags: [files]
+
+- name: Clone dotfiles repository
+  git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ home_dir }}/.dotfiles"
+    version: main
+  become_user: "{{ username }}"
+  tags: [files]
+
+- name: Install dotfiles
+  shell: |
+    cd {{ home_dir }}/.dotfiles
+    ./install.sh install
+  environment:
+    PREFERRED_SHELL: zsh
+  become_user: "{{ username }}"
+  tags: [files] 

@@ -1,0 +1,23 @@
+# Global variables for all hosts
+# These variables apply to all hosts in the inventory
+
+# Hostname for the target machine
+hostname: machine
+
+# Username to create/configure
+username: nocturnalbeast
+
+# Home directory for the user
+home_dir: "/home/{{ username }}"
+
+# Dotfiles repository URL
+dotfiles_repo: "https://github.com/nocturnalbeast/dotfiles"
+
+# Environment variables to be used across all tasks
+ansible_environment:
+  XDG_DATA_HOME: "{{ home_dir }}/.local/share"
+  XDG_STATE_HOME: "{{ home_dir }}/.local/state"
+  XDG_CACHE_HOME: "{{ home_dir }}/.cache"
+  XDG_CONFIG_HOME: "{{ home_dir }}/.config"
+  CARGO_HOME: "{{ home_dir }}/.local/share/cargo"
+  GOPATH: "{{ home_dir }}/.local/share/go"

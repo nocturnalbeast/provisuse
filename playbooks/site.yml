@@ -1,0 +1,13 @@
+---
+# Main playbook for openSUSE Tumbleweed provisioning
+- name: Provision OpenSUSE Tumbleweed Machine
+  hosts: all
+  become: true
+  environment: "{{ ansible_environment }}"
+
+  roles:
+    - { role: base, tags: ['base'] }
+    - { role: cli, tags: ['cli'] }
+    - { role: desktop, tags: ['desktop'] }
+    - { role: multimedia, tags: ['multimedia'] }
+    - { role: files, tags: ['files'] } 

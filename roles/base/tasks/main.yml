@@ -1,0 +1,35 @@
+---
+# Base system setup tasks
+
+- name: Update package repositories
+  community.general.zypper:
+    name: "*"
+    state: latest
+    update_cache: true
+  tags: [base]
+
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+  tags: [base]
+
+- name: Add user to required groups
+  user:
+    name: "{{ username }}"
+    groups: wheel,systemd-journal,video,audio,input
+    append: yes
+  tags: [base]
+
+- name: Install system services
+  community.general.zypper:
+    name:
+      - greetd
+      - greetd-tuigreet
+    state: present
+  tags: [base]
+
+- name: Enable greetd system service
+  systemd:
+    name: greetd.service
+    enabled: yes
+  tags: [base] 

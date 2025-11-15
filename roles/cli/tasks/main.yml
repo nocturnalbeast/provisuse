@@ -1,0 +1,85 @@
+---
+# CLI tools and utilities tasks
+
+## CLI Core
+- name: Install CLI core tools
+  community.general.zypper:
+    name:
+      - kitty
+      - neovim
+      - git
+      - zsh
+      - tmux
+      - bc
+      - stow
+      - fastfetch
+      - starship
+    state: present
+  tags: [cli, cli-core]
+
+## CLI Development
+- name: Install development tools
+  community.general.zypper:
+    name:
+      - npm
+      - cargo
+      - go
+      - python313-pipx
+    state: present
+  tags: [cli, cli-dev]
+
+- name: Install prettier globally via npm
+  npm:
+    name: prettier
+    global: yes
+  tags: [cli, cli-dev]
+
+- name: Install beets using pipx
+  pipx:
+    name: beets
+    state: present
+  tags: [cli, cli-dev]
+
+- name: Install tinty via cargo
+  community.general.cargo:
+    name: tinty
+    state: present
+  tags: [cli, cli-dev]
+
+## CLI Utilities
+- name: Install CLI utilities
+  community.general.zypper:
+    name:
+      - surfraw
+      - rmpc
+      - ddcutil
+      - yt-dlp
+      - fwupd
+      - xclip
+      - wl-clipboard
+      - podman
+      - podman-compose
+      - libnotify-tools
+      - brightnessctl
+      - udiskie
+      - socat
+      - playerctl
+      - opi
+    state: present
+  tags: [cli, cli-utils]
+
+## OPI Installations
+- name: Install UWSM using OPI
+  shell: opi uwsm
+  args:
+    creates: /usr/bin/uwsm
+  tags: [cli, cli-utils, cli-opi]
+
+## GitHub Tools
+- name: Include clipcat download task
+  include_tasks: github-clipcat.yml
+  tags: [cli, cli-utils, cli-thirdparty]
+
+- name: Include gallery-dl download task
+  include_tasks: github-gallery-dl.yml
+  tags: [cli, cli-utils, cli-thirdparty] 

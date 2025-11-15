@@ -1,0 +1,6 @@
+---
+# Multimedia role variables
+user_services:
+  - pipewire
+  - pipewire-pulse
+  - wireplumber 

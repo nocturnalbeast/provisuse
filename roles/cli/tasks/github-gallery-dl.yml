@@ -1,0 +1,41 @@
+---
+# Download and install gallery-dl from GitHub (https://github.com/mikf/gallery-dl)
+- name: Download latest gallery-dl release
+  block:
+    - name: Get latest gallery-dl release info
+      uri:
+        url: "https://api.github.com/repos/mikf/gallery-dl/releases/latest"
+        return_content: yes
+      register: gallery_dl_release
+      
+    - name: Download gallery-dl Linux binary
+      get_url:
+        url: "{{ gallery_dl_release.json.assets | selectattr('name', 'equalto', 'gallery-dl.bin') | map(attribute='browser_download_url') | first }}"
+        dest: "/tmp/gallery-dl.bin"
+        mode: '0755'
+      register: gallery_dl_download
+      
+    - name: Create ~/.bin directory if it doesn't exist
+      file:
+        path: "{{ ansible_env.HOME }}/.bin"
+        state: directory
+        mode: '0755'
+        
+    - name: Install gallery-dl binary to ~/.bin
+      copy:
+        src: "{{ gallery_dl_download.dest }}"
+        dest: "{{ ansible_env.HOME }}/.bin/gallery-dl"
+        mode: '0755'
+        remote_src: yes
+      
+    - name: Create gallery-dl config directory
+      file:
+        path: "{{ ansible_env.HOME }}/.config/gallery-dl"
+        state: directory
+        mode: '0755'
+        
+    - name: Clean up temporary files
+      file:
+        path: "{{ gallery_dl_download.dest }}"
+        state: absent
+  tags: [cli, cli-utils, cli-thirdparty] 
