@@ -25,6 +25,7 @@
     name:
       - greetd
       - greetd-tuigreet
+      - flatpak
     state: present
   tags: [base]
 

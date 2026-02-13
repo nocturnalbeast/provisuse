@@ -25,6 +25,7 @@
       - cargo
       - go
       - python313-pipx
+      - python313-libtmux
     state: present
   tags: [cli, cli-dev]
 
@@ -65,6 +66,7 @@
       - socat
       - playerctl
       - opi
+      - sshfs
     state: present
   tags: [cli, cli-utils]
 

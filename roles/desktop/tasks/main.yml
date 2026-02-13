@@ -21,6 +21,7 @@
       - rofi
       - maim
       - slop
+      - xcape
     state: present
   tags: [desktop, desktop-core, desktop-core-x11]
 
@@ -89,6 +90,13 @@
     repo: sublime-text
   tags: [desktop, desktop-apps]
 
+- name: Add danklinux repository
+  community.general.zypper:
+    name: "https://download.opensuse.org/repositories/home:/AvengeMedia:/danklinux/openSUSE_Tumbleweed/"
+    state: present
+    repo: home:AvengeMedia:danklinux
+  tags: [desktop, desktop-apps]
+
 - name: Refresh repositories
   community.general.zypper:
     update_cache: true
@@ -118,5 +126,8 @@
       - handlr
       - gnome-disk-utility
       - sublime-merge
+      - quickshell
+      - matugen
+      - deluge
     state: present
   tags: [desktop, desktop-apps] 
