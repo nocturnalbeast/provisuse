@@ -24,7 +24,7 @@
   community.general.zypper:
     name:
       - greetd
-      - greetd-tuigreet
+      - tuigreet
       - flatpak
     state: present
   tags: [base]
@@ -33,4 +33,17 @@
   systemd:
     name: greetd.service
     enabled: yes
+  tags: [base]
+
+- name: Deploy greetd configuration
+  copy:
+    content: |
+      [terminal]
+      vt = 1
+
+      [default_session]
+      command = "/usr/bin/tuigreet --time --remember --remember-session --cmd {{ default_session }}"
+      user = "greeter"
+    dest: /etc/greetd/config.toml
+    mode: '0644'
   tags: [base] 

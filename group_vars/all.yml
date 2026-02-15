@@ -13,6 +13,9 @@ home_dir: "/home/{{ username }}"
 # Dotfiles repository URL
 dotfiles_repo: "https://github.com/nocturnalbeast/dotfiles"
 
+# Default session for greetd display manager
+default_session: bspwm
+
 # Environment variables to be used across all tasks
 ansible_environment:
   XDG_DATA_HOME: "{{ home_dir }}/.local/share"
